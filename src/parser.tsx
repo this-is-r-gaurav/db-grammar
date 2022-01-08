@@ -45,6 +45,17 @@ export class SchemaDBParser extends CstParser {
         })
     })
 
+    identifier = this.RULE('identifier', ()=>{
+        this.OPTION(()=>{
+            this.CONSUME(Token.MULTILINE_COMMENT_DEFINITION)
+        })
+        this.CONSUME(Token.IDENTIFIER_DEFINITION)
+        this.OPTION1(()=>{
+            this.CONSUME1(Token.MULTILINE_COMMENT_DEFINITION)
+        })
+    })
+
+
     enum = this.RULE('enum', () => {
         this.SUBRULE(this.open_enum)
         this.MANY(() => {
@@ -55,7 +66,7 @@ export class SchemaDBParser extends CstParser {
 
     open_enum = this.RULE('open_enum', () => {
         this.CONSUME(Token.ENUM_DEFINITION)
-        this.CONSUME(Token.IDENTIFIER_DEFINITION)
+        this.SUBRULE(this.identifier)
         this.CONSUME(Token.LEFT_BRACKET_DEFINITION)
         this.CONSUME(Token.NEW_LINE_DEFINITION)
     })
@@ -66,7 +77,7 @@ export class SchemaDBParser extends CstParser {
     })
 
     enum_def = this.RULE('enum_def', () => {
-        this.CONSUME(Token.IDENTIFIER_DEFINITION)
+        this.SUBRULE(this.identifier)
         this.CONSUME(Token.NEW_LINE_DEFINITION)
     })
 
@@ -113,11 +124,11 @@ export class SchemaDBParser extends CstParser {
     })
 
     ref_table = this.RULE('ref_table', () => {
-        this.CONSUME(Token.IDENTIFIER_DEFINITION)
+        this.SUBRULE(this.identifier)
     })
 
     ref_column = this.RULE('ref_column', () => {
-        this.CONSUME(Token.IDENTIFIER_DEFINITION)
+        this.SUBRULE(this.identifier)
     })
 
     table = this.RULE('table', () => {
@@ -128,7 +139,7 @@ export class SchemaDBParser extends CstParser {
 
     open_table = this.RULE('open_table', () => {
         this.CONSUME(Token.TABLE_DEFINITION)
-        this.CONSUME(Token.IDENTIFIER_DEFINITION)
+        this.SUBRULE(this.identifier)
         this.CONSUME(Token.LEFT_BRACKET_DEFINITION)
         this.CONSUME(Token.NEW_LINE_DEFINITION)
     })
@@ -154,11 +165,11 @@ export class SchemaDBParser extends CstParser {
     })
 
     column_name = this.RULE('column_name', () => {
-        this.CONSUME(Token.IDENTIFIER_DEFINITION)
+        this.SUBRULE(this.identifier)
     })
 
     type = this.RULE('type', () => {
-        this.CONSUME(Token.IDENTIFIER_DEFINITION)
+        this.SUBRULE(this.identifier)
     })
 
     modifiers = this.RULE('modifiers', () => {
@@ -176,7 +187,7 @@ export class SchemaDBParser extends CstParser {
         this.CONSUME(Token.COLLON_DEFINITION)
         this.OR([{
             ALT: () => {
-                this.CONSUME(Token.IDENTIFIER_DEFINITION)
+                this.SUBRULE(this.identifier)
             },
         },{
             ALT: () => {

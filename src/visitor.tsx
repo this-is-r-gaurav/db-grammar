@@ -1,6 +1,6 @@
 import { CstNode } from 'chevrotain'
 import {SchemaDBParser} from './parser'
-import { IElementChild } from './types'
+import { IElementChild } from './types/index.d'
 export interface ISchemaDBVisitor {
     visit(cst: CstNode, state?: any): any;
 }
@@ -22,13 +22,13 @@ export function createSchemaDBVisitor(parser:SchemaDBParser) {
         enum(ctx:any) {
             return {
                 type: 'enum',
-                name: ctx.open_enum[0].children.IDENTIFIER_DEFINITION[0].image,
+                name: ctx.open_enum[0].children.identifier[0].children.IDENTIFIER_DEFINITION[0].image,
                 items: ctx.list.map((item:any) => this.visit(item)),
             }
         }
 
         enum_def(ctx:any) {
-            return ctx.IDENTIFIER_DEFINITION[0].image
+            return ctx.identifier[0].children.IDENTIFIER_DEFINITION[0].image
         }
 
         reference_type(ctx){
@@ -61,13 +61,13 @@ export function createSchemaDBVisitor(parser:SchemaDBParser) {
 
         ref_table_col(ctx:any) {
             return {
-                table: ctx.children.ref_table[0].children.IDENTIFIER_DEFINITION[0].image,
-                column: ctx.children.ref_column[0].children.IDENTIFIER_DEFINITION[0].image,
+                table: ctx.children.ref_table[0].children.identifier[0].children.IDENTIFIER_DEFINITION[0].image,
+                column: ctx.children.ref_column[0].children.identifier[0].children.IDENTIFIER_DEFINITION[0].image,
             }
         }
 
         table(ctx:any) {
-            const tableName = ctx.open_table[0].children.IDENTIFIER_DEFINITION[0].image
+            const tableName = ctx.open_table[0].children.identifier[0].children.IDENTIFIER_DEFINITION[0].image
             const columns = ctx.columns[0].children.list.map((column) =>
                 this.visit(column)
             )
@@ -91,11 +91,11 @@ export function createSchemaDBVisitor(parser:SchemaDBParser) {
         }
 
         column_name(ctx) {
-            return ctx.IDENTIFIER_DEFINITION[0].image
+            return ctx.identifier[0].children.IDENTIFIER_DEFINITION[0].image
         }
 
         type(ctx) {
-            return ctx.IDENTIFIER_DEFINITION[0].image
+            return ctx.identifier[0].children.IDENTIFIER_DEFINITION[0].image
         }
 
         modifiers(ctx) {
@@ -113,8 +113,8 @@ export function createSchemaDBVisitor(parser:SchemaDBParser) {
                 name: 'ref',
                 relation: this.reference_type(ctx),
                 foreign: {
-                    table: ctx.foreign_ref[0].children.ref_table_col[0].children.ref_table[0].children.IDENTIFIER_DEFINITION[0].image,
-                    column: ctx.foreign_ref[0].children.ref_table_col[0].children.ref_column[0].children.IDENTIFIER_DEFINITION[0].image
+                    table: ctx.foreign_ref[0].children.ref_table_col[0].children.ref_table[0].children.identifier[0].children.IDENTIFIER_DEFINITION[0].image,
+                    column: ctx.foreign_ref[0].children.ref_table_col[0].children.ref_column[0].children.identifier[0].children.IDENTIFIER_DEFINITION[0].image
                 }
                 
             }
