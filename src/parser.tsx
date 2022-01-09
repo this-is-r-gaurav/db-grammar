@@ -64,21 +64,30 @@ export class SchemaDBParser extends CstParser {
         this.SUBRULE(this.close_enum)
     })
 
+    single_line_comment = this.RULE('single_line_comment', ()=>{
+        this.OPTION(()=>{
+            this.CONSUME(Token.INLINE_COMMENT_DEFINITION)
+        })
+        this.AT_LEAST_ONE(()=>{
+            this.CONSUME(Token.NEW_LINE_DEFINITION)
+        })
+    })
+
     open_enum = this.RULE('open_enum', () => {
         this.CONSUME(Token.ENUM_DEFINITION)
         this.SUBRULE(this.identifier)
         this.CONSUME(Token.LEFT_BRACKET_DEFINITION)
-        this.CONSUME(Token.NEW_LINE_DEFINITION)
+        this.SUBRULE(this.single_line_comment)
     })
 
     close_enum = this.RULE('close_enum', () => {
         this.CONSUME(Token.RIGHT_BRACKET_DEFINITION)
-        this.CONSUME(Token.NEW_LINE_DEFINITION)
+        this.SUBRULE(this.single_line_comment)
     })
 
     enum_def = this.RULE('enum_def', () => {
         this.SUBRULE(this.identifier)
-        this.CONSUME(Token.NEW_LINE_DEFINITION)
+        this.SUBRULE(this.single_line_comment)
     })
 
     ref = this.RULE('ref', () => {
@@ -106,7 +115,7 @@ export class SchemaDBParser extends CstParser {
             }
         ])
         this.SUBRULE(this.primary_ref)
-        this.CONSUME(Token.NEW_LINE_DEFINITION)
+        this.SUBRULE(this.single_line_comment)
     })
 
     foreign_ref = this.RULE('foreign_ref', () => {
@@ -141,12 +150,12 @@ export class SchemaDBParser extends CstParser {
         this.CONSUME(Token.TABLE_DEFINITION)
         this.SUBRULE(this.identifier)
         this.CONSUME(Token.LEFT_BRACKET_DEFINITION)
-        this.CONSUME(Token.NEW_LINE_DEFINITION)
+        this.SUBRULE(this.single_line_comment)
     })
 
     close_table = this.RULE('close_table', () => {
         this.CONSUME(Token.RIGHT_BRACKET_DEFINITION)
-        this.CONSUME(Token.NEW_LINE_DEFINITION)
+        this.SUBRULE(this.single_line_comment)
     })
 
     columns = this.RULE('columns', () => {
@@ -161,7 +170,7 @@ export class SchemaDBParser extends CstParser {
         this.OPTION(() => {
             this.SUBRULE(this.modifiers)
         })
-        this.CONSUME(Token.NEW_LINE_DEFINITION)
+        this.SUBRULE(this.single_line_comment)
     })
 
     column_name = this.RULE('column_name', () => {

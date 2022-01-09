@@ -9,7 +9,7 @@ static LEFT_BRACKET_DEFINITION = createToken({name: 'LEFT_BRACKET_DEFINITION', p
 static RIGHT_BRACKET_DEFINITION = createToken({name: 'RIGHT_BRACKET_DEFINITION', pattern: /[ ]*}[ ]*/})
 static INLINE_COMMENT_DEFINITION = createToken({
     name: 'INLINE_COMMENT_DEFINITION',
-    pattern: /\/\/.*\n/,
+    pattern: /\/\/[^\n]*/,
     group: Lexer.SKIPPED,
 })
 static MULTILINE_COMMENT_DEFINITION = createToken({
