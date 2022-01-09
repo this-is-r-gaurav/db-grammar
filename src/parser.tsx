@@ -76,12 +76,12 @@ export class SchemaDBParser extends CstParser {
     open_enum = this.RULE('open_enum', () => {
         this.CONSUME(Token.ENUM_DEFINITION)
         this.SUBRULE(this.identifier)
-        this.CONSUME(Token.LEFT_BRACKET_DEFINITION)
+        this.CONSUME(Token.LEFT_PARANTHESIS_DEFINITION)
         this.SUBRULE(this.single_line_comment)
     })
 
     close_enum = this.RULE('close_enum', () => {
-        this.CONSUME(Token.RIGHT_BRACKET_DEFINITION)
+        this.CONSUME(Token.RIGHT_PARANTHESIS_DEFINITION)
         this.SUBRULE(this.single_line_comment)
     })
 
@@ -129,7 +129,19 @@ export class SchemaDBParser extends CstParser {
     ref_table_col = this.RULE('ref_table_col', () => {
         this.SUBRULE(this.ref_table)
         this.CONSUME(Token.DOT_DEFINITION)
-        this.SUBRULE(this.ref_column)
+        this.OPTION(()=>{
+            this.CONSUME(Token.LEFT_BRACKET_DEFINITION)
+        })
+        this.AT_LEAST_ONE_SEP({
+            SEP: Token.COMMA_DEFINITION,
+            DEF: ()=>{
+                this.SUBRULE(this.ref_column, {LABEL:'list'})
+            }
+
+        })
+        this.OPTION1(()=>{
+            this.CONSUME(Token.RIGHT_BRACKET_DEFINITION)
+        })
     })
 
     ref_table = this.RULE('ref_table', () => {
@@ -149,12 +161,12 @@ export class SchemaDBParser extends CstParser {
     open_table = this.RULE('open_table', () => {
         this.CONSUME(Token.TABLE_DEFINITION)
         this.SUBRULE(this.identifier)
-        this.CONSUME(Token.LEFT_BRACKET_DEFINITION)
+        this.CONSUME(Token.LEFT_PARANTHESIS_DEFINITION)
         this.SUBRULE(this.single_line_comment)
     })
 
     close_table = this.RULE('close_table', () => {
-        this.CONSUME(Token.RIGHT_BRACKET_DEFINITION)
+        this.CONSUME(Token.RIGHT_PARANTHESIS_DEFINITION)
         this.SUBRULE(this.single_line_comment)
     })
 

@@ -5,8 +5,12 @@ static TABLE_DEFINITION = createToken({name: 'TableDefinition', pattern: /TABLE/
 static ENUM_DEFINITION = createToken({name: 'EnumDefinition', pattern: /ENUM/i})
 static REFERENCE_DEFINITION = createToken({name: 'RefDefinition', pattern: /REF[ ]*:/i})
 
-static LEFT_BRACKET_DEFINITION = createToken({name: 'LEFT_BRACKET_DEFINITION', pattern: /[ ]*{[ ]*/})
-static RIGHT_BRACKET_DEFINITION = createToken({name: 'RIGHT_BRACKET_DEFINITION', pattern: /[ ]*}[ ]*/})
+static LEFT_PARANTHESIS_DEFINITION = createToken({name: 'LEFT_PARANTHESIS_DEFINITION', pattern: /[ ]*{[ ]*/})
+static RIGHT_PARANTHESIS_DEFINITION = createToken({name: 'RIGHT_PARANTHESIS_DEFINITION', pattern: /[ ]*}[ ]*/})
+static LEFT_BRACKET_DEFINITION = createToken({name: 'LEFT_BRACKET_DEFINITION', pattern: /[ ]*\([ ]*/})
+static RIGHT_BRACKET_DEFINITION = createToken({name: 'RIGHT_BRACKET_DEFINITION', pattern: /[ ]*\)[ ]*/})
+static LEFT_SQUARE_BRACKET_DEFINITION = createToken({name: 'LEFT_SQUARE_BRACKET_DEFINITION', pattern: /[ ]*\[[ ]*/})
+    static RIGHT_SQUARE_BRACKET_DEFINITION = createToken({name: 'RIGHT_SQUARE_BRACKET_DEFINITION', pattern: /[ ]*][ ]*/})
 static INLINE_COMMENT_DEFINITION = createToken({
     name: 'INLINE_COMMENT_DEFINITION',
     pattern: /\/\/[^\n]*/,
@@ -17,9 +21,6 @@ static MULTILINE_COMMENT_DEFINITION = createToken({
     pattern: /\/\*[^*]*\*+([^/*][^*]*\*+)*\//,
     group: Lexer.SKIPPED,
 })
-
-static LEFT_SQUARE_BRACKET_DEFINITION = createToken({name: 'LEFT_SQUARE_BRACKET_DEFINITION', pattern: /\[/})
-static RIGHT_SQUARE_BRACKET_DEFINITION = createToken({name: 'RIGHT_SQUARE_BRACKET_DEFINITION', pattern: /]/})
 static COMMA_DEFINITION = createToken({name: 'COMMA_DEFINITION', pattern: /,/})
 static COLLON_DEFINITION = createToken({name: 'COLLON_DEFINITION', pattern: /:/})
 
@@ -51,6 +52,8 @@ static ALL_TOKENS = [
     Token.TABLE_DEFINITION,
     Token.REFERENCE_DEFINITION,
     Token.ENUM_DEFINITION,
+    Token.LEFT_PARANTHESIS_DEFINITION,
+    Token.RIGHT_PARANTHESIS_DEFINITION,
     Token.LEFT_BRACKET_DEFINITION,
     Token.RIGHT_BRACKET_DEFINITION,
     Token.LEFT_SQUARE_BRACKET_DEFINITION,

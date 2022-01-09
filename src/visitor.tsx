@@ -62,7 +62,7 @@ export function createSchemaDBVisitor(parser:SchemaDBParser) {
         ref_table_col(ctx:any) {
             return {
                 table: ctx.children.ref_table[0].children.identifier[0].children.IDENTIFIER_DEFINITION[0].image,
-                column: ctx.children.ref_column[0].children.identifier[0].children.IDENTIFIER_DEFINITION[0].image,
+                columns: ctx.children.list.map(item=>item.children.identifier[0].children.IDENTIFIER_DEFINITION[0].image),
             }
         }
 
